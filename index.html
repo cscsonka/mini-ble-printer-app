@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Mini Printer App</title>
+        <link rel="icon" type="image/png" href="mini-printer-logo.png" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+        <!-- LZO Library CDN Loader -->
+        <script type="module">
+            import { LZO } from "https://cdn.jsdelivr.net/npm/lzo-ts@0.2.3/dist/index.mjs";
+            window.LZO = LZO;
+            console.log("LZO library loaded successfully from CDN");
+        </script>
+    </head>
+    <body>
+        <div id="progress-container" class="progress-container">
+            <div class="progress-bar-bg">
+                <div id="progress-bar" class="progress-bar-fill"></div>
+            </div>
+        </div>
+        <main class="app-shell">
+            <aside class="sidebar">
+                <div class="brand">
+                    <h2>🖨️ Mini Printer App</h2>
+                </div>
+
+                <button id="connect-btn" class="btn btn-primary btn-status">
+                    Connect Printer
+                </button>
+
+                <div class="control-panel">
+                    <div class="settings-group">
+                        <label for="threshold">Black Threshold</label>
+                        <div class="slider-container">
+                            <input
+                                type="range"
+                                id="threshold"
+                                min="0"
+                                max="255"
+                                value="128"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="checkbox-container">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="dither" checked />
+                            Dithering
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="invert" />
+                            Invert
+                        </label>
+                    </div>
+
+                    <div class="actions-group">
+                        <button id="feed-btn" class="btn" disabled>
+                            Feed Paper
+                        </button>
+                        <button id="print-btn" class="btn" disabled>
+                            Print Preview
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="preview-area">
+                <div class="workspace-grid">
+                    <div class="preview-card">
+                        <h2>Original Image</h2>
+                        <div class="canvas-container" id="upload-box">
+                            <input
+                                type="file"
+                                id="file-input"
+                                style="display: none"
+                                accept="image/*"
+                            />
+                            <div class="upload-zone" id="upload-prompt">
+                                <svg
+                                    class="upload-icon"
+                                    viewBox="0 0 24 24"
+                                    width="48"
+                                    height="48"
+                                >
+                                    <path
+                                        fill="currentColor"
+                                        d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"
+                                    />
+                                </svg>
+                                <p class="upload-text">
+                                    Paste a screenshot, drag & drop, or
+                                    <span>browse</span>
+                                </p>
+                            </div>
+                            <canvas id="source" style="display: none"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="preview-card">
+                        <h2>Print Preview</h2>
+                        <div class="canvas-container">
+                            <canvas id="preview"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <script src="tinyprint.js"></script>
+        <script src="script.js"></script>
+        <script>
+            const observer = new MutationObserver(() => {
+                const canvas = document.getElementById("source");
+                const prompt = document.getElementById("upload-prompt");
+                if (canvas.style.display !== "none" || canvas.width > 0) {
+                    prompt.style.display = "none";
+                    canvas.style.display = "block";
+                } else {
+                    prompt.style.display = "flex";
+                    canvas.style.display = "none";
+                }
+            });
+            observer.observe(document.getElementById("source"), {
+                attributes: true,
+                attributeFilter: ["style", "width"],
+            });
+        </script>
+    </body>
+</html>
