@@ -2,7 +2,7 @@ const PAPER_WIDTH = 384;
 const BLOCK_LINES = 20;
 const GAP_LINES = 64;
 const BLE_PACKET_SIZE = 20;
-const BLE_PACKET_DELAY = 4;
+const BLE_PACKET_DELAY = 5;
 
 const CHECKSUM_TABLE = (() => {
     const table = new Uint8Array(256);
