@@ -76,6 +76,7 @@ function updatePreview() {
 
     sourceCanvas.width = destWidth;
     sourceCanvas.height = destHeight;
+    srcCtx.imageSmoothingEnabled = false;
     srcCtx.drawImage(loadedImage, 0, 0, destWidth, destHeight);
 
     const grayscale = getGrayscaleData(sourceCanvas);
@@ -125,6 +126,7 @@ function updatePreview() {
     previewCanvas.width = destWidth;
     previewCanvas.height = destHeight;
     const prevCtx = previewCanvas.getContext("2d");
+    prevCtx.imageSmoothingEnabled = false;
     const prevImageData = prevCtx.createImageData(destWidth, destHeight);
 
     for (let i = 0; i < processed.length; i++) {
@@ -347,7 +349,7 @@ connectBtn.addEventListener("click", async () => {
         try {
             await printer.connect();
         } catch (err) {
-            alert(`Connection failed: ${err.message}`);
+            console.log(`Connection failed: ${err.message}`);
         } finally {
             if (!printer.state.connected) {
                 connectBtn.classList.remove("btn-loading");
@@ -362,7 +364,7 @@ feedBtn.addEventListener("click", async () => {
     try {
         await printer.feed();
     } catch (err) {
-        alert(`Feed failed: ${err.message}`);
+        console.log(`Feed failed: ${err.message}`);
     }
 });
 
@@ -394,7 +396,7 @@ printBtn.addEventListener("click", async () => {
             }
         }, 1500);
     } catch (err) {
-        alert(`Print failed: ${err.message}`);
+        console.log(`Print failed: ${err.message}`);
         if (progressContainer) progressContainer.style.display = "none";
     }
 });
@@ -404,3 +406,9 @@ window.addEventListener("DOMContentLoaded", () => {
     loadTestCard();
     updateUIState();
 });
+
+console.log(
+    [...createCommand(0xa4, Uint8Array.of(0x13))]
+        .map((x) => x.toString(16).padStart(2, "0"))
+        .join(" "),
+);

@@ -146,7 +146,7 @@ function createPrintCommands(data) {
 const printer = (() => {
     const UUID = {
         SERVICE: "0000ae30-0000-1000-8000-00805f9b34fb",
-        WRITE: "0000ae01-0000-1000-8000-00805f9b34fb", // matching UUID_WRITE from printer.py
+        WRITE: "0000ae01-0000-1000-8000-00805f9b34fb",
     };
 
     let device = null;
